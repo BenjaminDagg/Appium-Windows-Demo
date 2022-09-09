@@ -11,45 +11,39 @@ using OpenQA.Selenium;
 
 namespace AppiumTutorial
 {
-    public class Tests
+    public class Tests : BaseTest
     {
-        private string DriverUrl = "http://127.0.0.1:4723";         //found by starting WinAppDriver.exe
-        private string AppPath = @"C:\Windows\System32\notepad.exe";
-        private string AppDriverPath = @"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe";
-        private WindowsDriver<WindowsElement> AppSession;
+        private MainWindowPage _mainWindow;
 
         public WindowsElement TextBoxMain
         {
             get
             {
-                return AppSession.FindElementByName("Text Editor");
+                return driver.FindElementByName("Text Editor");
             }
         }
 
         private By FileMenuItem;
 
+        public Tests() : base()
+        {
+            
+            FileMenuItem = By.XPath("//MenuItem[@Name='File']");
+        }
+
         [SetUp]
         public void Setup()
         {
-            
-            SessionManager.Init();
-
-            AppSession = SessionManager.Driver;
-
-            FileMenuItem = By.XPath("//MenuItem[@Name='File']");
+            _mainWindow = new MainWindowPage(driver);
         }
 
 
         [TearDown]
         public void EndTest()
         {
-            SessionManager.Close();
+            
         }
 
-        private static void StartWinAppDriver()
-        {
-           
-        }
 
         [Test]
         public void Test1()
@@ -58,7 +52,7 @@ namespace AppiumTutorial
             //WindowsElement textBoxMain = AppSession.FindElementByName("Text Editor");
             //textBoxMain.SendKeys("Test");
 
-            TextBoxMain.SendKeys("Test text");
+            _mainWindow.EnterText("Page object text");
             Thread.Sleep(5000);
             Assert.Pass();
         }
@@ -66,16 +60,16 @@ namespace AppiumTutorial
         [Test]
         public void Click_File()
         {
-            AppSession.FindElement(FileMenuItem).Click();
+            _mainWindow.Click_File();
             Thread.Sleep(5000);
         }
 
         [Test]
         public void Close_File_Menu()
         {
-            AppSession.FindElement(FileMenuItem).Click();
+            driver.FindElement(FileMenuItem).Click();
             Thread.Sleep(2000);
-            AppSession.FindElement(FileMenuItem).Click();
+            driver.FindElement(FileMenuItem).Click();
             Assert.Pass();
         }
     }
