@@ -31,10 +31,10 @@ namespace AppiumTutorial
         [SetUp]
         public void Setup()
         {
-            var appiumOptions = new AppiumOptions();
-            appiumOptions.AddAdditionalCapability("app",AppPath);
-            appiumOptions.AddAdditionalCapability("deviceName", "WindowsPC");
-            this.AppSession = new WindowsDriver<WindowsElement>(new Uri(DriverUrl),appiumOptions);
+            
+            SessionManager.Init();
+
+            AppSession = SessionManager.Driver;
 
             FileMenuItem = By.XPath("//MenuItem[@Name='File']");
         }
@@ -43,12 +43,7 @@ namespace AppiumTutorial
         [TearDown]
         public void EndTest()
         {
-            //close session (app)
-            if (AppSession != null)
-            {
-                AppSession.Close();
-                AppSession.Quit();
-            }
+            SessionManager.Close();
         }
 
         private static void StartWinAppDriver()
@@ -81,6 +76,7 @@ namespace AppiumTutorial
             AppSession.FindElement(FileMenuItem).Click();
             Thread.Sleep(2000);
             AppSession.FindElement(FileMenuItem).Click();
+            Assert.Pass();
         }
     }
 }
