@@ -24,8 +24,8 @@ namespace POS_Automation
 
             Thread.Sleep(1000);
 
-            _deviceManagementPage.DisplayDeviceList();
-
+            //_deviceManagementPage.DisplayDeviceList();
+            _deviceManagementPage.DisablePromoTickets();
             Assert.Pass();
         }
     }
